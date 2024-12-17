@@ -30,4 +30,15 @@ public class AccountService {
 
     }
 
+    public Account login(Account account){
+        Account fullAccount = accountDAO.getAccountByUsername(account.getUsername());
+        
+        //check that username exists and the passwords match
+        if(fullAccount != null && fullAccount.getPassword().equals(account.getPassword())){
+            return fullAccount;
+        }else{
+            return null;
+        }
+    }
+
 }

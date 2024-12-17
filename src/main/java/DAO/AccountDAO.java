@@ -12,6 +12,7 @@ import Model.Account;
 
 public class AccountDAO {
 
+    //returns null if no username exists
     public Account getAccountByUsername(String username){
         Connection con = ConnectionUtil.getConnection();
         try {
