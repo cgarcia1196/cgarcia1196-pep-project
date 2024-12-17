@@ -3,6 +3,9 @@ package Controller;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -36,9 +39,10 @@ public class SocialMediaController {
         app.post("/register", this::registerHandler);
         app.post("/login", this::loginHander);
         app.post("/messages", this::newMessageHandler);
+        app.get("/messages", this::getAllMessagesHandler);
         //todo
         //
-        //app.get("/messages", this::getAllMessagesHandler);
+        //
         //app.get("/messages/{message_id}", this::getMessageByIdHandler);
         //app.delete("/messages/{message_id}", this::deleteMessageHandler);
         //app.patch("/messages/{message_id}", this::updateMessageHandler);
@@ -95,5 +99,13 @@ public class SocialMediaController {
         else{
             ctx.json(mapper.writeValueAsString(createdMessage)).status(200);
         }
+    }
+    private void getAllMessagesHandler(Context ctx) throws JsonProcessingException{
+        ObjectMapper mapper = new ObjectMapper();
+        //get all mesages and save them to list
+        List<Message> allMsgs;// = new ArrayList<>();
+        allMsgs = messageService.getAllMessages();
+        //return messages and set status 200:OK
+        ctx.json(mapper.writeValueAsString(allMsgs)).status(200);
     }
 }
