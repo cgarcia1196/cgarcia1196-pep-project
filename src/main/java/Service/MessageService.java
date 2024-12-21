@@ -33,5 +33,13 @@ public class MessageService {
     public Message deleteMessage(int id){
         return messageDAO.deleteMessage(id);
     }
+
+    public Message updateMessage(int id, Message message){
+        if(message.getMessage_text().length() < 255 && !message.getMessage_text().isBlank()){
+            return messageDAO.updateMessage(id, message);
+        }else{
+            return null;
+        }
+    }
     
 }

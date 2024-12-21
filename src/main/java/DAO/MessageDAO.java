@@ -3,6 +3,9 @@ package DAO;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.h2.command.Prepared;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -121,5 +124,43 @@ public class MessageDAO {
         
 
         return message;
+    }
+
+    public Message updateMessage(int id, Message message){
+        Message fullMessage  = null;
+        Connection conn = ConnectionUtil.getConnection();
+        //sql 
+        String sqlSelect = "SELECT * FROM message WHERE message_id = ?;";
+        String sqlUpdate = "UPDATE message SET message_text = ? WHERE message_id = ?;";
+
+        //prepared statements
+
+        try {
+            PreparedStatement psUpdate = conn.prepareStatement(sqlUpdate);
+            psUpdate.setString(1, message.getMessage_text());
+            psUpdate.setInt(2, id);
+
+            int rowsUpdated = psUpdate.executeUpdate();
+            //check if message was changed
+            if(rowsUpdated > 0){
+                //get updated message
+                PreparedStatement psSelect = conn.prepareStatement(sqlSelect);
+                psSelect.setInt(1, id);
+                ResultSet rs = psSelect.executeQuery();
+                while(rs.next()){
+                    fullMessage = new Message(
+                        rs.getInt("message_id"), 
+                        rs.getInt("posted_by"),
+                        rs.getString("message_text"),
+                        rs.getLong("time_posted_epoch")
+                        );
+                } 
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        
+        return fullMessage;
     }
 }
