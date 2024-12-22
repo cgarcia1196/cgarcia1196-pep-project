@@ -1,5 +1,6 @@
 package Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import DAO.MessageDAO;
@@ -40,6 +41,10 @@ public class MessageService {
         }else{
             return null;
         }
+    }
+
+    public ArrayList<Message> getAllUserMessages(int id){
+        return messageDAO.getAllUserMessages(id);
     }
     
 }
